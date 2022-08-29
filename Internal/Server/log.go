@@ -5,6 +5,13 @@ import (
 	"sync"
 )
 
+/*
+	To append a record to the log, you just append to the slice. Each time we read
+	a record given an index, we use that index to look up the record in the slice.
+	If the offset given by the client doesn’t exist, we return an error saying that
+	the offset doesn’t exist.
+*/
+
 type Log struct {
 	mu   *sync.Mutex
 	recs []Record
