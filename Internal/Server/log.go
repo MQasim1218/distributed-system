@@ -13,7 +13,7 @@ import (
 */
 
 type Log struct {
-	mu   *sync.Mutex
+	mu   sync.Mutex
 	recs []Record
 }
 
@@ -27,7 +27,10 @@ var (
 )
 
 func NewLog() *Log {
-	return &Log{}
+	return &Log{
+		mu:   sync.Mutex{},
+		recs: []Record{},
+	}
 }
 
 func (l *Log) Append(rec Record) (uint64, error) {

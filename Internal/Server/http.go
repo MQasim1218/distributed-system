@@ -44,10 +44,10 @@ type (
 )
 
 func (srv *httpServerLog) handleProduce(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 
-	log.Println("We are in the Handle Produce Function")
-
-	var req ProductReq = ProductReq{}
+	// ProductReq holds the data sent by the Client and appends to the serverLog
+	var req ProductReq = ProductReq{Record: Record{}}
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
@@ -69,6 +69,8 @@ func (srv *httpServerLog) handleProduce(w http.ResponseWriter, r *http.Request) 
 }
 
 func (srv *httpServerLog) handleConsume(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
 	// ConsumeReq holds the `Index` of the Record that the Caller wants to read
 	var req = ConsumeReq{}
 
@@ -101,8 +103,6 @@ func newHttpSrvr() *httpServerLog {
 func NewHttpSrvr(addr string) *http.Server {
 	httpsrvlogs := newHttpSrvr()
 	r := mux.NewRouter()
-
-	log.Println("Here in this Function!!")
 
 	r.HandleFunc("/", httpsrvlogs.handleProduce).Methods("POST")
 	r.HandleFunc("/", httpsrvlogs.handleConsume).Methods("GET")
