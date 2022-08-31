@@ -8,5 +8,3 @@ message Record {
     bytes offset = 2;
 }
 
-
-
